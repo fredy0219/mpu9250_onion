@@ -239,7 +239,7 @@ class MPU9250:
 
 
    	def read_who_i_am(self):
-   		c = i2c.readBytes(MPU9250_ADDRESS, WHO_AM_I,1)
+   		c = i2c.readBytes(MPU9250_ADDRESS, WHO_AM_I_MPU9250,1)
    		hex_c = [hex(data) for data in c]
    		print "MPU9250 , I AM {} , I should be 0x70.".format(hex_c)
 
