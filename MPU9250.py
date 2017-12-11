@@ -312,8 +312,8 @@ class MPU9250:
 			gSTAvg[2] += (raw_data[4]<<8) | raw_data[5]
 
 		for i in xrange(3):
-			aAvg[i] /= 200
-			gAvg[i] /= 200
+			aSAvg[i] /= 200
+			gSAvg[i] /= 200
 
 		# Configure the gyro and accelerometer for normal operation
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00)  
