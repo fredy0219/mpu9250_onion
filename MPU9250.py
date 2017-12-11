@@ -266,7 +266,7 @@ class MPU9250:
 		self_test = array('b',[0,0,0,0,0,0])
 		aAvg, gAvg, aSTAvg, gSTAvg = array('l',[0,0,0]), array('l',[0,0,0]), array('l',[0,0,0]), array('l',[0,0,0])
 		factoryTrim = array('f', [0,0,0,0,0,0])
-		FS = '' # uint8_t
+		FS = 0x00 # uint8_t
 
 		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
 		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
