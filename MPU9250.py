@@ -321,7 +321,7 @@ class MPU9250:
 		time.sleep( 25 / 1000) # 25ms
 
 		# Retrieve accelerometer and gyro factory Self-TesSELF_TEST_X_GYROt Code from USR_Reg
-		self_test = i2c.readBytes(MPU9250_ADDRESS, , 6)
+		self_test = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_GYRO , 6)
 		# self_test[0] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_ACCEL,1) # X-axis accel self-test results
   #  		self_test[1] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_ACCEL,1) # Y-axis accel self-test results
   #  		self_test[2] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_ACCEL,1) # Z-axis accel self-test results
