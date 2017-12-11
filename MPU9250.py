@@ -264,7 +264,7 @@ class MPU9250:
 
 		raw_data = []
 		self_test = []
-		aAvg, gAvg, aSTAvg, gSTAvg = [],[],[],[]
+		aAvg, gAvg, aSTAvg, gSTAvg = [0,0,0],[0,0,0],[0,0,0],[0,0,0]
 		# raw_data = array('b',[0,0,0,0,0,0])
 		# self_test = array('b',[0,0,0,0,0,0])
 		# aAvg, gAvg, aSTAvg, gSTAvg = array('l',[0,0,0]), array('l',[0,0,0]), array('l',[0,0,0]), array('l',[0,0,0])
