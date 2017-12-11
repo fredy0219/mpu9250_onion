@@ -276,6 +276,7 @@ class MPU9250:
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
+			print raw_data
 			aAvg[0] += (raw_data[0]<<8) | raw_data[1]
 			aAvg[1] += (raw_data[2]<<8) | raw_data[3]
 			aAvg[2] += (raw_data[4]<<8) | raw_data[5]
