@@ -271,7 +271,7 @@ class MPU9250:
 		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
 		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
 		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<3) #Set full scale range for the gyro to 250 dps
-		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG2, 0x02); # Set accelerometer rate to 1 kHz and bandwidth to 92 Hz
+		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, 0x02); # Set accelerometer rate to 1 kHz and bandwidth to 92 Hz
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, FS<<3); # Set full scale range for the accelerometer to 2 g
 
 		for i in xrange(200):
