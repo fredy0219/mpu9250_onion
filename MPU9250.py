@@ -241,7 +241,7 @@ class MPU9250:
    	def read_who_i_am(self):
    		c = i2c.readBytes(MPU9250_ADDRESS, WHO_AM_I_MPU9250,1)
    		hex_c = [hex(data) for data in c]
-   		print "MPU9250 , I AM {} , I should be 0x70.".format(hex_c)
+   		print "MPU9250 , I AM {} , I should be 0x71.".format(hex_c)
 
 
 	def read_accel(self):
@@ -318,7 +318,7 @@ class MPU9250:
 
 		# Retrieve factory self-test value from self-test code reads
 		for i in xrange(6):
-			factoryTrim[i] = (2620/1<<FS)*(pow( 1.01 , (selfTest[i] - 1.0) ))
+			factoryTrim[i] = (2620/1<<FS)*(pow( 1.01 , (self_test[i] - 1.0) ))
 
 		#Report results as a ratio of (STR - FT)/FT; the change from Factory Trim of the Self-Test Response
 		#To get percent, must multiply by 100
