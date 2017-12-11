@@ -262,9 +262,12 @@ class MPU9250:
 
 	def mpu_self_test(self):
 
-		raw_data = array('b',[0,0,0,0,0,0])
-		self_test = array('b',[0,0,0,0,0,0])
-		aAvg, gAvg, aSTAvg, gSTAvg = array('l',[0,0,0]), array('l',[0,0,0]), array('l',[0,0,0]), array('l',[0,0,0])
+		raw_data = []
+		self_test = []
+		aAvg, gAvg, aSTAvg, gSTAvg = [],[],[],[]
+		# raw_data = array('b',[0,0,0,0,0,0])
+		# self_test = array('b',[0,0,0,0,0,0])
+		# aAvg, gAvg, aSTAvg, gSTAvg = array('l',[0,0,0]), array('l',[0,0,0]), array('l',[0,0,0]), array('l',[0,0,0])
 		factoryTrim = array('f', [0,0,0,0,0,0])
 		FS = 0x00 # uint8_t
 
@@ -291,11 +294,6 @@ class MPU9250:
 			gAvg[i] /= 200
 
 		print aAvg[0]
-
-		# print "aAvg : "
-		# print aAvg
-		# print "gAvg : "
-		# print gAvg
 
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
    		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
