@@ -287,6 +287,7 @@ class MPU9250:
 			gAvg[1] += (raw_data[2]<<8) | raw_data[3]
 			gAvg[2] += (raw_data[4]<<8) | raw_data[5]
 
+		print aAvg[0]
 		for i in xrange(3):
 			aAvg[i] /= 200
 			gAvg[i] /= 200
@@ -298,7 +299,7 @@ class MPU9250:
 
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
    		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
-   		time.sleep( 25 / 1000) # 25ms
+   		time.sleep(1) # 25ms
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
@@ -311,6 +312,7 @@ class MPU9250:
 			gSTAvg[1] += (raw_data[2]<<8) | raw_data[3]
 			gSTAvg[2] += (raw_data[4]<<8) | raw_data[5]
 
+		print aSTAvg[0]
 		for i in xrange(3):
 			aSTAvg[i] /= 200
 			gSTAvg[i] /= 200
@@ -318,7 +320,7 @@ class MPU9250:
 		# Configure the gyro and accelerometer for normal operation
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00)  
 		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0x00)
-		time.sleep( 25 / 1000) # 25ms
+		time.sleep(1) # 25ms
 
 		# Retrieve accelerometer and gyro factory Self-TesSELF_TEST_X_GYROt Code from USR_Reg
 		self_test = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_GYRO , 6)
@@ -327,12 +329,12 @@ class MPU9250:
 		for i in xrange(6):
 			factoryTrim[i] = (2620/1<<FS)*(pow( 1.01 , (self_test[i] - 1.0) ))
 
-		print "aSTAvg"
-		print aSTAvg
-		print "aAvg"
-		print aAvg
-		print "factory trim"
-		print factoryTrim
+		# print "aSTAvg"
+		# print aSTAvg
+		# print "aAvg"
+		# print aAvg
+		# print "factory trim"
+		# print factoryTrim
 		#Report results as a ratio of (STR - FT)/FT; the change from Factory Trim of the Self-Test Response
 		#To get percent, must multiply by 100
 		for i in xrange(3):
