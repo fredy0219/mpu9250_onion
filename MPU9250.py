@@ -276,7 +276,6 @@ class MPU9250:
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
-			print raw_data
 			aAvg[0] += (raw_data[0]<<8) | raw_data[1]
 			aAvg[1] += (raw_data[2]<<8) | raw_data[3]
 			aAvg[2] += (raw_data[4]<<8) | raw_data[5]
@@ -289,6 +288,8 @@ class MPU9250:
 		for i in xrange(3):
 			aAvg[i] /= 200
 			gAvg[i] /= 200
+
+			print aAvg , gAvg
 
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
    		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
