@@ -280,9 +280,7 @@ class MPU9250:
 			aAvg[1] += (raw_data[2]<<8) | raw_data[3]
 			aAvg[2] += (raw_data[4]<<8) | raw_data[5]
 
-			print (raw_data[0]<<8) | raw_data[1]
-
-			raw_data = i2c.readBytes(MPU9250_ADDRESS,GYRO_XOUT_H, 6)
+			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
 			gAvg[0] += (raw_data[0]<<8) | raw_data[1]
 			gAvg[1] += (raw_data[2]<<8) | raw_data[3]
 			gAvg[2] += (raw_data[4]<<8) | raw_data[5]
@@ -291,6 +289,8 @@ class MPU9250:
 		for i in xrange(3):
 			aAvg[i] /= 200
 			gAvg[i] /= 200
+
+		print aAvg[0]
 
 		# print "aAvg : "
 		# print aAvg
@@ -316,6 +316,8 @@ class MPU9250:
 		for i in xrange(3):
 			aSTAvg[i] /= 200
 			gSTAvg[i] /= 200
+
+		print aSTAvg[0]
 
 		# Configure the gyro and accelerometer for normal operation
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00)  
