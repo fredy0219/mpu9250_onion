@@ -327,6 +327,10 @@ class MPU9250:
 		for i in xrange(6):
 			factoryTrim[i] = (2620/1<<FS)*(pow( 1.01 , (self_test[i] - 1.0) ))
 
+		print "aSTAvg"
+		print aSTAvg
+		print "aAvg"
+		print aAvg
 		print "factory trim"
 		print factoryTrim
 		#Report results as a ratio of (STR - FT)/FT; the change from Factory Trim of the Self-Test Response
