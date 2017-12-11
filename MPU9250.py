@@ -282,7 +282,7 @@ class MPU9250:
 
 			print (raw_data[0]<<8) | raw_data[1]
 
-			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
+			raw_data = i2c.readBytes(MPU9250_ADDRESS,GYRO_XOUT_H, 6)
 			gAvg[0] += (raw_data[0]<<8) | raw_data[1]
 			gAvg[1] += (raw_data[2]<<8) | raw_data[3]
 			gAvg[2] += (raw_data[4]<<8) | raw_data[5]
