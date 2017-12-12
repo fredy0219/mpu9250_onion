@@ -399,8 +399,8 @@ class MPU9250:
 		packet_count = fifo_count/12
 
 		data = [0,0,0,0,0,0,0,0,0,0,0,0]
-		accel_bias_temp = [0,0,0,0,0,0]
-		gyro_bias_temp = [0,0,0,0,0,0]
+		accel_bias_temp = [0,0,0]
+		gyro_bias_temp = [0,0,0]
 
 		for i in xrange(packet_count):
 			accel_temp, gyro_temp = [0,0,0], [0,0,0]
@@ -413,11 +413,11 @@ class MPU9250:
 			gyro_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
 
 		accel_bias_temp[0] = int(accel_bias_temp[0]/packet_count) # Normalize sums to get average count biases
-		accel_bias_temp[1] /= int(accel_bias_temp[1]/packet_count)
-		accel_bias_temp[2] /= int(accel_bias_temp[2]/packet_count)
-		gyro_bias_temp[0] /= int(gyro_bias_temp[0]/packet_count)
-		gyro_bias_temp[1] /= int(gyro_bias_temp[1]/packet_count)
-		gyro_bias_temp[2] /= int(gyro_bias_temp[2]/packet_count)
+		accel_bias_temp[1] = int(accel_bias_temp[1]/packet_count)
+		accel_bias_temp[2] = int(accel_bias_temp[2]/packet_count)
+		gyro_bias_temp[0] = int(gyro_bias_temp[0]/packet_count)
+		gyro_bias_temp[1] = int(gyro_bias_temp[1]/packet_count)
+		gyro_bias_temp[2] = int(gyro_bias_temp[2]/packet_count)
 
 		if accel_bias_temp[2] > 0L : # Remove gravity from the z-axis accelerometer bias calculation
 			accel_bias_temp[2] -= accelsensitivity
@@ -436,10 +436,8 @@ class MPU9250:
 		i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_H, data[4])
 		i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_L, data[5])
 
-		self.g_bias[0] = float(gyro_bias_temp[0])/float(gyrosensitivity)
-		self.g_bias[1] = float(gyro_bias_temp[1])/float(gyrosensitivity)
-		self,g_bias[2] = float(gyro_bias_temp[2])/float(gyrosensitivity)
-
+		for i in xrange(3):
+			self.g_bias[i] = float(gyro_bias_temp[i])/float(gyrosensitivity)
 		# --- Accelerometer calibratation
 
 		accel_bias_reg = [0,0,0]
