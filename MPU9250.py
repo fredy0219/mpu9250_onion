@@ -210,12 +210,12 @@ class MPU9250:
 
    	def init_MPU9250(self):
    		self.read_who_i_am()
-   		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x00)  
-		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
-   		self.mpu_self_test_test();
+		# self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x00)  
+		# self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
+   		# self.mpu_self_test_test();
    		# # self.mpu_self_test_test()
-   		# self.mpu_self_test()
-   		# print self.Self_test
+   		self.mpu_self_test()
+   		print self.Self_test
 
    		# self.mpu_calibrate()
    		# print self.g_bias[0]
