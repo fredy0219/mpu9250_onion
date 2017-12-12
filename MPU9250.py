@@ -300,15 +300,15 @@ class MPU9250:
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
-			aAvg[0] += struct.unpack('>h',chr(raw_data[0]+raw_data[1]))
-			aAvg[1] += struct.unpack('>h',chr(raw_data[2]+raw_data[3]))
-			aAvg[2] += struct.unpack('>h',chr(raw_data[4]+raw_data[6]))
+			aAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))
+			aAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))
+			aAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[6]))
 
 
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
-			gAvg[0] += struct.unpack('>h',chr(raw_data[0]+raw_data[1]))
-			gAvg[1] += struct.unpack('>h',chr(raw_data[2]+raw_data[3]))
-			gAvg[2] += struct.unpack('>h',chr(raw_data[4]+raw_data[6]))
+			gAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))
+			gAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))
+			gAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[6]))
 
 		for i in xrange(3):
 			aAvg[i] /= 200
@@ -320,14 +320,14 @@ class MPU9250:
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
-			aSTAvg[0] += struct.unpack('>h',chr(raw_data[0]+raw_data[1]))
-			aSTAvg[1] += struct.unpack('>h',chr(raw_data[2]+raw_data[3]))
-			aSTAvg[2] += struct.unpack('>h',chr(raw_data[4]+raw_data[6]))
+			aSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))
+			aSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))
+			aSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[6]))
 
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
-			gSTAvg[0] += struct.unpack('>h',chr(raw_data[0]+raw_data[1]))
-			gSTAvg[1] += struct.unpack('>h',chr(raw_data[2]+raw_data[3]))
-			gSTAvg[2] += struct.unpack('>h',chr(raw_data[4]+raw_data[6]))
+			gSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))
+			gSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))
+			gSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[6]))
 
 		for i in xrange(3):
 			aSTAvg[i] /= 200
