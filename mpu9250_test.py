@@ -14,15 +14,16 @@ if __name__ == '__main__':
 
 	# 	time.sleep(1)
 
-	axt,ayt,azt = mpu9250.read_accel()
-	mpu9250.get_ares()
+	for i in xrange(10):
+		axt,ayt,azt = mpu9250.read_accel()
+		mpu9250.get_ares()
 
-	ax = axt * mpu9250.ares
-	ay = ayt * mpu9250.ares
-	az = azt * mpu9250.ares
+		ax = axt * mpu9250.ares
+		ay = ayt * mpu9250.ares
+		az = azt * mpu9250.ares
 
-	print "X-acceleration: {0} mg".format(1000*ax)
-	print "Y-acceleration: {0} mg".format(1000*ay)
-	print "Z-acceleration: {0} mg".format(1000*az)
+		print "X-acceleration: {0} mg".format(1000*ax)
+		print "Y-acceleration: {0} mg".format(1000*ay)
+		print "Z-acceleration: {0} mg".format(1000*az)
 
 
