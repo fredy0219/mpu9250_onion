@@ -541,12 +541,12 @@ class MPU9250:
 		c = self.i2c.readBytes(MPU9250_ADDRESS,GYRO_CONFIG,1)[0]
 		c = c & ~0x03
 		c = c & ~0x18
-		c = c | gscale
+		c = c | self.gscale
 		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, c )
 
 		c = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_CONFIG)[0]
 		c = c & ~0x18
-		c = c | ascale << 3
+		c = c | self.ascale << 3
 		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, c)
 
 		c = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_CONFIG2)[0]
