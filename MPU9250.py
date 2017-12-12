@@ -335,7 +335,7 @@ class MPU9250:
 
 		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
    		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
-   		time.sleep(1) # 25ms
+   		time.sleep(0.025) # 25ms
 
 		for i in xrange(200):
 			raw_data = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
@@ -348,8 +348,6 @@ class MPU9250:
 			gSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			gSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			gSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
-
-			time.sleep(0.001)
 
 		for i in xrange(3):
 			aSTAvg[i] /= 200
@@ -384,13 +382,13 @@ class MPU9250:
 	def mpu_calibrate(self):
 
 		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x80) # Write a one to bit 7 reset bit; toggle reset device
-		time.sleep(100/1000)
+		time.sleep(0.01)
 
 		# get stable time source; Auto select clock source to be PLL gyroscope reference if ready 
 		# else use the internal oscillator, bits 2:0 = 001
 		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01)  
 		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
-		time.sleep(200/1000)
+		time.sleep(0.02)
 
 		# Configure device for bias calculation
 		self.i2c.writeByte(MPU9250_ADDRESS, INT_ENABLE, 0x00)   # Disable all interrupts
@@ -399,7 +397,7 @@ class MPU9250:
 		self.i2c.writeByte(MPU9250_ADDRESS, I2C_MST_CTRL, 0x00) # Disable I2C master
 		self.i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x00)  # Disable FIFO and I2C master modes
 		self.i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x0C)  # Reset FIFO and DMP
-		time.sleep(15/1000)
+		time.sleep(0.015)
 
 		self.i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x01)      # Set low-pass filter to 188 Hz
 		self.i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00)  # Set sample rate to 1 kHz
@@ -411,7 +409,7 @@ class MPU9250:
 
 		self.i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x40) #Enable FIFO
 		self.i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x78) #Enable gyro and accelerometer sensors for FIFO  (max size 512 bytes in MPU-9150)
-		time.sleep(40/1000) #accumulate 40 samples in 40 milliseconds = 480 bytes
+		time.sleep(0.04) #accumulate 40 samples in 40 milliseconds = 480 bytes
 
 		self.i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x00)
 		fifo_count_data = self.i2c.readBytes(MPU9250_ADDRESS, FIFO_COUNTH, 2)
