@@ -309,6 +309,7 @@ class MPU9250:
 			aAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			aAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
 
+			print aAvg[1]
 
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
 			gAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
