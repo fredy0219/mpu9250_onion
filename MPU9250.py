@@ -345,10 +345,11 @@ class MPU9250:
 			aSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
 
 			raw_data = self.i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
-			print raw_data
 			gSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			gSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			gSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
+
+			time.sleep(0.001)
 
 		for i in xrange(3):
 			aSTAvg[i] /= 200
