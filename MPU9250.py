@@ -304,6 +304,9 @@ class MPU9250:
 		factoryTrim = array('f', [0,0,0,0,0,0])
 		FS = 0x00 # uint8_t
 
+		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01)  
+		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
+
 		self.i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
 		self.i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
 		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<<3) #Set full scale range for the gyro to 250 dps
