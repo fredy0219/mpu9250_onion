@@ -216,6 +216,8 @@ class MPU9250:
    		self.mpu_calibrate()
    		print self.g_bias[0]
    		print self.a_bias[0]
+
+   		del i2c
   #  		#wake up device
 		# i2c.writeByte(MPU9250_ADDRESS,PWR_MGMT_1,0x00)
 		# time.sleep(0.1)
