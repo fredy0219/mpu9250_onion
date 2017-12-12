@@ -549,10 +549,10 @@ class MPU9250:
 		c = c | self.ascale << 3
 		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, c)
 
-		c = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_CONFIG2,1)[0]
+		c = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_CONFIG_2,1)[0]
 		c = c & ~0x0F
 		c = c | 0x03
-		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG2, c)
+		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, c)
 
 		self.i2c.writeByte(MPU9250_ADDRESS, INT_PIN_CFG, 0x22)
 		self.i2c.writeByte(MPU9250_ADDRESS, INT_ENABLE, 0x01)
