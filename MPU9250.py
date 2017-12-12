@@ -209,8 +209,8 @@ class MPU9250:
 		self.a_bias = array('f', [0,0,0])
 
 		self.interrupt_pin = onionGpio.OnionGpio(18)
-		self.interrupt_pin.setInputDirection()
-		# self.interrupt_pin.setValue(0)
+		a = self.interrupt_pin.setInputDirection()
+		b = self.interrupt_pin.setValue(0)
 
    	def init_MPU9250(self):
    		self.read_who_i_am()
