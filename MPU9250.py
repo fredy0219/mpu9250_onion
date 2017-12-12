@@ -188,7 +188,7 @@ AFS_4G = 1
 AFS_8G = 2
 AFS_16G = 3
 
-
+onionGpio._freeGpio()
 i2c = onionI2C.OnionI2C()
 
 class MPU9250:
@@ -211,8 +211,6 @@ class MPU9250:
 		# self.interrupt_pin = onionGpio.OnionGpio(18)
 		# a = self.interrupt_pin.setInputDirection()
 		# b = self.interrupt_pin.setValue(0)
-
-		onionGpio._freeGpio()
 
 		print '> Instantiating gpio object'
 		gpio14 	= onionGpio.OnionGpio(19)
