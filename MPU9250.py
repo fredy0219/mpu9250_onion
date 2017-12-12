@@ -213,7 +213,7 @@ class MPU9250:
 		# b = self.interrupt_pin.setValue(0)
 
 		print '> Instantiating gpio object'
-		gpio14 	= onionGpio.OnionGpio(pin)
+		gpio14 	= onionGpio.OnionGpio(14)
 		print ''
 
 		print '> Set direction to input... '
