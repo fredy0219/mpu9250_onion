@@ -206,8 +206,9 @@ class MPU9250:
 
    	def init_MPU9250(self):
    		self.read_who_i_am()
-   		self.mpu_self_test()
-   		print self.Self_test
+   		self.mpu_self_test_test()
+   		# self.mpu_self_test()
+   		# print self.Self_test
 
   #  		#wake up device
 		# i2c.writeByte(MPU9250_ADDRESS,PWR_MGMT_1,0x00)
@@ -259,6 +260,20 @@ class MPU9250:
 		gyro_Z = (gyro_list[4] << 8) | gyro_list[5]
 
 		return gyro_X,gyro_Y,gyro_Z
+	def mpu_self_test_test(self):
+
+		raw_input = []
+		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
+		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
+		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<3) #Set full scale range for the gyro to 250 dps
+		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, 0x02); # Set accelerometer rate to 1 kHz and bandwidth to 92 Hz
+		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, FS<<3); # Set full scale range for the accelerometer to 2 g
+
+		raw_input = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
+
+		for data in raw_input:
+			print bin(data)
+
 
 	def mpu_self_test(self):
 
