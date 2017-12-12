@@ -1,9 +1,9 @@
 from MPU9250 import MPU9250
 import time
-mpu6500 = MPU9250()
+mpu9250 = MPU9250()
 
 if __name__ == '__main__':
-	mpu6500.init_MPU9250()
+	mpu9250.init_MPU9250()
 	# mpu6500.read_who_i_am()
 	# while True:
 	# 	ax,ay,az = mpu6500.read_accel()
@@ -13,5 +13,16 @@ if __name__ == '__main__':
 	# 	print "{} , {} , {}".format(gx,gy,gz)
 
 	# 	time.sleep(1)
-	
+
+	axt,ayt,azt = mpu9250.read_accel()
+	mpu9250.get_ares()
+
+	ax = axt * mpu9250.ascale
+	ay = ayt * mpu9250.ascale
+	az = azt * mpu9250.ascale
+
+	print "X-acceleration: {0} mg".format(1000*ax)
+	print "Y-acceleration: {0} mg".format(1000*ay)
+	print "Z-acceleration: {0} mg".format(1000*az)
+
 
