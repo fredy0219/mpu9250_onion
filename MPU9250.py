@@ -204,13 +204,17 @@ class MPU9250:
 		self.ay = 0
 		self.az = 0
 
+		self.g_bias = array('f', [0,0,0])
+		self.a_bias = array('f', [0,0,0])
 
    	def init_MPU9250(self):
    		self.read_who_i_am()
    		# self.mpu_self_test_test()
    		self.mpu_self_test()
-   		print self.Self_test
 
+   		self.mpu_calibrate()
+   		print g_bias[0]
+   		print a_bias[0]
   #  		#wake up device
 		# i2c.writeByte(MPU9250_ADDRESS,PWR_MGMT_1,0x00)
 		# time.sleep(0.1)
@@ -316,7 +320,7 @@ class MPU9250:
 
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
    		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
-   		time.sleep(1) # 25ms
+   		time.sleep(25/1000) # 25ms
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
@@ -337,7 +341,7 @@ class MPU9250:
 		# Configure the gyro and accelerometer for normal operation
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00)  
 		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0x00)
-		time.sleep(1) # 25ms
+		time.sleep(25/1000) # 25ms
 
 		# Retrieve accelerometer and gyro factory Self-TesSELF_TEST_X_GYROt Code from USR_Reg
 		self_test[0] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_ACCEL , 1)[0]
@@ -356,6 +360,142 @@ class MPU9250:
 		for i in xrange(3):
 			self.Self_test[i] = 100.0*(aSTAvg[i] - aAvg[i])/factoryTrim[i] - 100
 			self.Self_test[i+3] = 100.0*(gSTAvg[i] - gAvg[i])/factoryTrim[i+3] - 100
+
+	def mpu_calibrate(self):
+
+		i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x80) # Write a one to bit 7 reset bit; toggle reset device
+		time.sleep(100/1000)
+
+		# get stable time source; Auto select clock source to be PLL gyroscope reference if ready 
+		# else use the internal oscillator, bits 2:0 = 001
+		i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01)  
+		i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
+		time.sleep(200/1000)
+
+		# Configure device for bias calculation
+		i2c.writeByte(MPU9250_ADDRESS, INT_ENABLE, 0x00)   # Disable all interrupts
+		i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x00)    # Disable FIFO
+		i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x00)  # Turn on internal clock source
+		i2c.writeByte(MPU9250_ADDRESS, I2C_MST_CTRL, 0x00) # Disable I2C master
+		i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x00)  # Disable FIFO and I2C master modes
+		i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x0C)  # Reset FIFO and DMP
+		time.sleep(15/1000)
+
+		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x01)      # Set low-pass filter to 188 Hz
+		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00)  # Set sample rate to 1 kHz
+		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, 0x00)  # Set gyro full-scale to 250 degrees per second, maximum sensitivity
+		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00) #  Set accelerometer full-scale to 2 g, maximum sensitivity
+
+		gyrosensitivity = 131 # = 131 LSB/degrees/sec
+		accelsensitivity = 16384 # = 16384 LSB/g
+
+		i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x40) #Enable FIFO
+		i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x78) #Enable gyro and accelerometer sensors for FIFO  (max size 512 bytes in MPU-9150)
+		time.sleep(40/1000) #accumulate 40 samples in 40 milliseconds = 480 bytes
+
+		i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x00)
+		fifo_count_data = i2c.readBytes(MPU9250_ADDRESS, FIFO_COUNTH, 2)
+		fifo_count = struct.unpack('>h',chr(fifo_count_data[0])+chr(fifo_count_data[1]))[0]
+		packet_count = fifo_count/12
+
+		data = [0,0,0,0,0,0,0,0,0,0,0,0]
+		accel_bias_temp = [0,0,0,0,0,0]
+		gyro_bias_temp = [0,0,0,0,0,0]
+
+		for i in xrange(packet_count):
+			accel_temp, gyro_temp = [0,0,0], [0,0,0]
+			data = readBytes(MPU9250_ADDRESS, FIFO_R_W, 12)
+			accel_bias_temp[0] += struct.unpack('>h',chr(data[0])+chr(data[1]))[0] # Sum individual signed 16-bit biases to get accumulated signed 32-bit biases
+			accel_bias_temp[1] += struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
+			accel_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
+			gyro_bias_temp[0] += struct.unpack('>h',chr(data[0])+chr(data[1]))[0]
+			gyro_bias_temp[1] += struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
+			gyro_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
+
+		accel_bias_temp[0] = int(accel_bias[0]/packet_count) # Normalize sums to get average count biases
+		accel_bias_temp[1] /= int(accel_bias[1]/packet_count)
+		accel_bias_temp[2] /= int(accel_bias[2]/packet_count)
+		gyro_bias_temp[0] /= int(gyro_bias_temp[0]/packet_count)
+		gyro_bias_temp[1] /= int(gyro_bias_temp[1]/packet_count)
+		gyro_bias_temp[2] /= int(gyro_bias_temp[2]/packet_count)
+
+		if accel_bias_temp[2] > 0L : # Remove gravity from the z-axis accelerometer bias calculation
+			accel_bias_temp[2] -= accelsensitivity
+		else:
+			accel_bias_temp[2] += accelsensitivity
+
+		# --- Gyro calibratation
+		for i in xrange(3):
+			data[i] = (-gyro_bias_temp[i] / 4 >> 8 ) & 0xFF # Divide by 4 to get 32.9 LSB per deg/s to conform to expected bias input format
+			data[i+1] = (-gyro_bias_temp[i] / 4 ) & 0xFF    # Biases are additive, so change sign on calculated average gyro biases
+
+		i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_H, data[0])
+		i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_L, data[1])
+		i2c.writeByte(MPU9250_ADDRESS, YG_OFFSET_H, data[2])
+		i2c.writeByte(MPU9250_ADDRESS, YG_OFFSET_L, data[3])
+		i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_H, data[4])
+		i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_L, data[5])
+
+		self.g_bias[0] = (float) gyro_bias[0]/(float) gyrosensitivity;  
+		self.g_bias[1] = (float) gyro_bias[1]/(float) gyrosensitivity;
+		self,g_bias[2] = (float) gyro_bias[2]/(float) gyrosensitivity;
+
+		# --- Accelerometer calibratation
+
+		accel_bias_reg = [0,0,0]
+		data = i2c.readBytes(MPU9250_ADDRESS, XA_OFFSET_H, 6)
+		accel_bias_reg[0] = struct.unpack('>h',chr(data[0])+chr(data[1]))[0]
+		accel_bias_reg[1] = struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
+		accel_bias_reg[2] = struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
+
+		mask = 1uL
+		mask_bit = [0,0,0]
+
+		for i in xrange(3):
+			if accel_bias_reg[i] & mask:
+				mask_bit[i] = 0x01
+
+		accel_bias_reg[0] -= accel_bias_temp[0]/8
+		accel_bias_reg[1] -= accel_bias_temp[1]/8
+		accel_bias_reg[2] -= accel_bias_temp[2]/8
+
+		data[0] = (accel_bias_reg[0] >> 8) & 0xFF
+		data[1] = (accel_bias_reg[0])
+		data[1] = data[1] | mask_bit[0]
+		data[2] = (accel_bias_reg[1] >> 8) & 0xFF
+		data[3] = (accel_bias_reg[1])
+		data[3] = data[3] | mask_bit[1]
+		data[4] = (accel_bias_reg[2] >> 8) & 0xFF
+		data[5] = (accel_bias_reg[2])
+		data[5] = data[5] | mask_bit[2]
+
+		i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_H, data[0])
+		i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_L, data[1])
+		i2c.writeByte(MPU9250_ADDRESS, YA_OFFSET_H, data[2])
+		i2c.writeByte(MPU9250_ADDRESS, YA_OFFSET_L, data[3])
+		i2c.writeByte(MPU9250_ADDRESS, ZA_OFFSET_H, data[4])
+		i2c.writeByte(MPU9250_ADDRESS, ZA_OFFSET_L, data[5])
+
+		self.a_bias[0] = accel_bias_temp[0] / accelsensitivity
+		self.a_bias[1] = accel_bias_temp[1] / accelsensitivity
+		self.a_bias[2] = accel_bias_temp[2] / accelsensitivity
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
