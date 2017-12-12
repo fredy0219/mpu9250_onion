@@ -275,7 +275,7 @@ class MPU9250:
 
 		rc0 = chr(raw_input[0])
 		rc1 = chr(raw_input[1])
-		result = struct.unpack('>h',result)[0]
+		result = struct.unpack('>h',rc0+rc1)[0]
 		print result 
 		# for data in raw_input:
 		# 	print bin(data)
