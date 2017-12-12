@@ -260,21 +260,21 @@ class MPU9250:
 
 
 	def read_accel(self):
-		accel_list = self.i2c.readBytes(MPU9250_ADDRESS,ACCEL_OUT,6)
+		accel_list = self.i2c.readBytes(MPU9250_ADDRESS,ACCEL_XOUT_H,6)
 
-		accel_X += struct.unpack('>h',chr(accel_list[0])+chr(accel_list[1]))[0]
-		accel_Y += struct.unpack('>h',chr(accel_list[2])+chr(accel_list[3]))[0]
-		accel_Z += struct.unpack('>h',chr(accel_list[4])+chr(accel_list[5]))[0]
+		accel_X = struct.unpack('>h',chr(accel_list[0])+chr(accel_list[1]))[0]
+		accel_Y = struct.unpack('>h',chr(accel_list[2])+chr(accel_list[3]))[0]
+		accel_Z = struct.unpack('>h',chr(accel_list[4])+chr(accel_list[5]))[0]
 
 		return accel_X,accel_Y,accel_Z
 
 	def read_gyro(self):
 
-		gyro_list = self.i2c.readBytes(MPU9250_ADDRESS,ACCEL_OUT,6)
+		gyro_list = self.i2c.readBytes(MPU9250_ADDRESS,GYRO_XOUT_H,6)
 
-		gyro_X += struct.unpack('>h',chr(gyro_list[0])+chr(gyro_list[1]))[0]
-		gyro_Y += struct.unpack('>h',chr(gyro_list[2])+chr(gyro_list[3]))[0]
-		gyro_Z += struct.unpack('>h',chr(gyro_list[4])+chr(gyro_list[5]))[0]
+		gyro_X = struct.unpack('>h',chr(gyro_list[0])+chr(gyro_list[1]))[0]
+		gyro_Y = struct.unpack('>h',chr(gyro_list[2])+chr(gyro_list[3]))[0]
+		gyro_Z = struct.unpack('>h',chr(gyro_list[4])+chr(gyro_list[5]))[0]
 
 		return gyro_X,gyro_Y,gyro_Z
 
