@@ -268,7 +268,8 @@ class MPU9250:
 		return gyro_X,gyro_Y,gyro_Z
 	def mpu_self_test_test(self):
 
-		raw_input = []
+		raw_input = [0,0,0,0,0,0]
+
 		FS = 0x00 # uint8_t
 		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
 		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
@@ -304,9 +305,10 @@ class MPU9250:
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, FS<<3); # Set full scale range for the accelerometer to 2 g
 
 		for i in xrange(200):
-			raw_data[0],raw_data[1] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 2)
-			raw_data[2],raw_data[3] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_YOUT_H, 2)
-			raw_data[4],raw_data[5] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_ZOUT_H, 2)
+			# raw_data[0],raw_data[1] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 2)
+			# raw_data[2],raw_data[3] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_YOUT_H, 2)
+			# raw_data[4],raw_data[5] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_ZOUT_H, 2)
+			raw_input = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
 
 			print raw_data
 			aAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
