@@ -310,10 +310,11 @@ class MPU9250:
 			gAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			gAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
 
+		print aAvg[0]
 		for i in xrange(3):
 			aAvg[i] /= 200
 			gAvg[i] /= 200
-
+		print aAvg[0]
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
    		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
    		time.sleep(1) # 25ms
@@ -328,11 +329,11 @@ class MPU9250:
 			gSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			gSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			gSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
-
+		print aSTAvg[0]
 		for i in xrange(3):
 			aSTAvg[i] /= 200
 			gSTAvg[i] /= 200
-
+		print aSTAvg[0]
 
 		# Configure the gyro and accelerometer for normal operation
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00)  
