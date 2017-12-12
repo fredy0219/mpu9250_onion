@@ -341,11 +341,11 @@ class MPU9250:
 
 		# Retrieve accelerometer and gyro factory Self-TesSELF_TEST_X_GYROt Code from USR_Reg
 		self_test = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_GYRO , 6)
-		print 
+		print self_test[0]
 		# Retrieve factory self-test value from self-test code reads
 		for i in xrange(6):
 			factoryTrim[i] = (2620/1<<FS)*(pow( 1.01 , (self_test[i] - 1.0) ))
-
+		print factoryTrim[0]
 		#Report results as a ratio of (STR - FT)/FT; the change from Factory Trim of the Self-Test Response
 		#To get percent, must multiply by 100
 		for i in xrange(3):
