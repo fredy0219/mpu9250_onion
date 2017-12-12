@@ -448,7 +448,7 @@ class MPU9250:
 		accel_bias_reg[1] = struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
 		accel_bias_reg[2] = struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
 
-		mask = 1uL
+		mask = 1L
 		mask_bit = [0,0,0]
 
 		for i in xrange(3):
