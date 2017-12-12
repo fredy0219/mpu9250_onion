@@ -273,7 +273,9 @@ class MPU9250:
 
 		raw_input = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
 
-		result = struct.unpack('<h',raw_input[0]+raw_input[1])[0]
+		rc0 = chr(raw_input[0])
+		rc1 = chr(raw_input[1])
+		result = struct.unpack('<h',rc0+rc1)[0]
 		print result 
 		# for data in raw_input:
 		# 	print bin(data)
