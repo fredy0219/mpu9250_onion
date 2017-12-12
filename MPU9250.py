@@ -415,6 +415,9 @@ class MPU9250:
 
 		self.i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x00)
 		fifo_count_data = self.i2c.readBytes(MPU9250_ADDRESS, FIFO_COUNTH, 2)
+
+		print bin(fifo_count_data[0])
+		print bin(fifo_count_data[1])
 		fifo_count = struct.unpack('>h',chr(fifo_count_data[0])+chr(fifo_count_data[1]))[0]
 		packet_count = fifo_count/12
 
