@@ -413,9 +413,9 @@ class MPU9250:
 			gyro_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
 
 		for i in xrange(3):
-			print accel_bias_temp[0]
+			print accel_bias_temp[i]
 		for i in xrange(3):
-			print gyro_bias_temp[0]
+			print gyro_bias_temp[i]
 
 
 		accel_bias_temp[0] = accel_bias_temp[0]/packet_count # Normalize sums to get average count biases
