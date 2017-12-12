@@ -2,7 +2,6 @@ import time
 import struct
 from array import array
 from OmegaExpansion import onionI2C
-import onionGpio
 
 ## MPU9250 Default I2C slave address
 MPU9250_ADDRESS	= 0x68
@@ -208,25 +207,6 @@ class MPU9250:
 		self.g_bias = array('f', [0,0,0])
 		self.a_bias = array('f', [0,0,0])
 
-		# self.interrupt_pin = onionGpio.OnionGpio(18)
-		# a = self.interrupt_pin.setInputDirection()
-		# b = self.interrupt_pin.setValue(0)
-
-		print '> Instantiating gpio object'
-		gpio14 	= onionGpio.OnionGpio(19)
-		print ''
-
-		print '> Set direction to input... '
-		ret 	= gpio14.setOutputDirection()
-		print '    returned %d'%ret
-
-		print '> Get direction: ',
-		direction 	= gpio14.setValue(0)
-		print direction
-
-		print '> Read value: ',
-		val		= gpio14.getValue()
-		print val
 
    	def init_MPU9250(self):
    		self.read_who_i_am()
