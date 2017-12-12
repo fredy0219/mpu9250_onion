@@ -283,8 +283,8 @@ class MPU9250:
 
 	def mpu_self_test(self):
 
-		raw_data = []
-		self_test = []
+		raw_data = [0,0,0,0,0,0]
+		self_test = [0,0,0,0,0,0]
 		aAvg, gAvg, aSTAvg, gSTAvg = [0,0,0],[0,0,0],[0,0,0],[0,0,0]
 		# raw_data = array('b',[0,0,0,0,0,0])
 		# self_test = array('b',[0,0,0,0,0,0])
