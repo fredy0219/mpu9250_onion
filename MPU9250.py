@@ -404,7 +404,7 @@ class MPU9250:
 
 		for i in xrange(packet_count):
 			accel_temp, gyro_temp = [0,0,0], [0,0,0]
-			data = readBytes(MPU9250_ADDRESS, FIFO_R_W, 12)
+			data = i2c.readBytes(MPU9250_ADDRESS, FIFO_R_W, 12)
 			accel_bias_temp[0] += struct.unpack('>h',chr(data[0])+chr(data[1]))[0] # Sum individual signed 16-bit biases to get accumulated signed 32-bit biases
 			accel_bias_temp[1] += struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
 			accel_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
