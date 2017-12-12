@@ -263,6 +263,7 @@ class MPU9250:
 	def mpu_self_test_test(self):
 
 		raw_input = []
+		FS = 0x00 # uint8_t
 		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
 		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
 		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<3) #Set full scale range for the gyro to 250 dps
