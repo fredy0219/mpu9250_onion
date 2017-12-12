@@ -187,10 +187,11 @@ AFS_4G = 1
 AFS_8G = 2
 AFS_16G = 3
 
-i2c = onionI2C.OnionI2C()
 
 class MPU9250:
 	def __init__(self):
+
+		self.i2c = onionI2C.OnionI2C()
 		self.gscale = GFS_1000DPS
 		self.ascale = AFS_4G
 
@@ -217,44 +218,44 @@ class MPU9250:
    		print self.g_bias[0]
    		print self.a_bias[0]
 
-   		del i2c
+   		del self.i2c
   #  		#wake up device
-		# i2c.writeByte(MPU9250_ADDRESS,PWR_MGMT_1,0x00)
+		# self.i2c.writeByte(MPU9250_ADDRESS,PWR_MGMT_1,0x00)
 		# time.sleep(0.1)
 		# #get stable time source
-		# i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01);
+		# self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01);
 		# time.sleep(0.2)
 
 		# #Configure Gyro
-		# status = i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x03)
+		# status = self.i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x03)
 
 		# if status == 0:
 		# 	print "no"
 		# elif status == 1:
 		# 	print "yes"
 		# #Set sample rate = gyroscope output rate/(1 + SMPLRT_DIV)
-		# i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x04)
+		# self.i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x04)
 
-  # 		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, self.gscale << 3)
+  # 		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, self.gscale << 3)
 
-  # 		i2c.writeByte(MPU9250_ADDRESS,ACCEL_CONFIG, self.ascale << 3)
+  # 		self.i2c.writeByte(MPU9250_ADDRESS,ACCEL_CONFIG, self.ascale << 3)
 
-  # 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, 0x03) # Write new ACCEL_CONFIG2 register value
+  # 		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, 0x03) # Write new ACCEL_CONFIG2 register value
 
   # 		#Configure Interrupts and Bypass Enable
-  # 		i2c.writeByte(MPU9250_ADDRESS, INT_PIN_CFG, 0x02)
-  #  		#i2c.writeByte(MPU9250_ADDRESS, INT_ENABLE, 0x01) # Enable data ready (bit 0) interrupt
+  # 		self.i2c.writeByte(MPU9250_ADDRESS, INT_PIN_CFG, 0x02)
+  #  		#self.i2c.writeByte(MPU9250_ADDRESS, INT_ENABLE, 0x01) # Enable data ready (bit 0) interrupt
   #  		time.sleep(0.1);
 
 
    	def read_who_i_am(self):
-   		c = i2c.readBytes(MPU9250_ADDRESS, WHO_AM_I_MPU9250,1)
+   		c = self.i2c.readBytes(MPU9250_ADDRESS, WHO_AM_I_MPU9250,1)
    		hex_c = [hex(data) for data in c]
    		print "MPU9250 , I AM {} , I should be 0x71.".format(hex_c)
 
 
 	def read_accel(self):
-		accel_list = i2c.readBytes(MPU9250_ADDRESS,ACCEL_OUT,6)
+		accel_list = self.i2c.readBytes(MPU9250_ADDRESS,ACCEL_OUT,6)
 		accel_X = (accel_list[0] << 8) | accel_list[1]
 		accel_Y = (accel_list[2] << 8) | accel_list[3]
 		accel_Z = (accel_list[4] << 8) | accel_list[5]
@@ -262,7 +263,7 @@ class MPU9250:
 		return accel_X,accel_Y,accel_Z
 
 	def read_gyro(self):
-		gyro_list = i2c.readBytes(MPU9250_ADDRESS,GYRO_OUT,6)
+		gyro_list = self.i2c.readBytes(MPU9250_ADDRESS,GYRO_OUT,6)
 		gyro_X = (gyro_list[0] << 8) | gyro_list[1]
 		gyro_Y = (gyro_list[2] << 8) | gyro_list[3]
 		gyro_Z = (gyro_list[4] << 8) | gyro_list[5]
@@ -273,13 +274,13 @@ class MPU9250:
 		raw_input = [0,0,0,0,0,0]
 
 		FS = 0x00 # uint8_t
-		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
-		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
-		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<3) #Set full scale range for the gyro to 250 dps
-		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, 0x02); # Set accelerometer rate to 1 kHz and bandwidth to 92 Hz
-		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, FS<<3); # Set full scale range for the accelerometer to 2 g
+		self.i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
+		self.i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
+		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<3) #Set full scale range for the gyro to 250 dps
+		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, 0x02); # Set accelerometer rate to 1 kHz and bandwidth to 92 Hz
+		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, FS<<3); # Set full scale range for the accelerometer to 2 g
 
-		raw_input = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
+		raw_input = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
 
 		rc0 = chr(raw_input[0])
 		rc1 = chr(raw_input[1])
@@ -300,23 +301,23 @@ class MPU9250:
 		factoryTrim = array('f', [0,0,0,0,0,0])
 		FS = 0x00 # uint8_t
 
-		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
-		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
-		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<<3) #Set full scale range for the gyro to 250 dps
-		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, 0x02); # Set accelerometer rate to 1 kHz and bandwidth to 92 Hz
-		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, FS<<3); # Set full scale range for the accelerometer to 2 g
+		self.i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
+		self.i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
+		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<<3) #Set full scale range for the gyro to 250 dps
+		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG_2, 0x02); # Set accelerometer rate to 1 kHz and bandwidth to 92 Hz
+		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, FS<<3); # Set full scale range for the accelerometer to 2 g
 
 		for i in xrange(200):
-			# raw_data[0],raw_data[1] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 2)
-			# raw_data[2],raw_data[3] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_YOUT_H, 2)
-			# raw_data[4],raw_data[5] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_ZOUT_H, 2)
+			# raw_data[0],raw_data[1] = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 2)
+			# raw_data[2],raw_data[3] = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_YOUT_H, 2)
+			# raw_data[4],raw_data[5] = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_ZOUT_H, 2)
 			
-			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
+			raw_data = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
 			aAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			aAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			aAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
 
-			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
+			raw_data = self.i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
 			gAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			gAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			gAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
@@ -325,18 +326,18 @@ class MPU9250:
 			aAvg[i] /= 200
 			gAvg[i] /= 200
 
-		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
-   		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
+		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
+   		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
    		time.sleep(1) # 25ms
 
 		for i in xrange(200):
-			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
+			raw_data = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
 			print raw_data
 			aSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			aSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			aSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
 
-			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
+			raw_data = self.i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
 			print raw_data
 			gSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			gSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
@@ -348,17 +349,17 @@ class MPU9250:
 
 
 		# Configure the gyro and accelerometer for normal operation
-		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00)  
-		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0x00)
+		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00)  
+		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0x00)
 		time.sleep(1) # 25ms
 
 		# Retrieve accelerometer and gyro factory Self-TesSELF_TEST_X_GYROt Code from USR_Reg
-		self_test[0] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_ACCEL , 1)[0]
-		self_test[1] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_ACCEL , 1)[0]
-		self_test[2] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_ACCEL , 1)[0]
-		self_test[3] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_GYRO , 1)[0]
-		self_test[4] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_GYRO , 1)[0]
-		self_test[5] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_GYRO , 1)[0]
+		self_test[0] = self.i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_ACCEL , 1)[0]
+		self_test[1] = self.i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_ACCEL , 1)[0]
+		self_test[2] = self.i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_ACCEL , 1)[0]
+		self_test[3] = self.i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_GYRO , 1)[0]
+		self_test[4] = self.i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_GYRO , 1)[0]
+		self_test[5] = self.i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_GYRO , 1)[0]
 
 		print "-----"
 		# Retrieve factory self-test value from self-test code reads
@@ -374,38 +375,38 @@ class MPU9250:
 
 	def mpu_calibrate(self):
 
-		i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x80) # Write a one to bit 7 reset bit; toggle reset device
+		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x80) # Write a one to bit 7 reset bit; toggle reset device
 		time.sleep(100/1000)
 
 		# get stable time source; Auto select clock source to be PLL gyroscope reference if ready 
 		# else use the internal oscillator, bits 2:0 = 001
-		i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01)  
-		i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
+		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01)  
+		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
 		time.sleep(200/1000)
 
 		# Configure device for bias calculation
-		i2c.writeByte(MPU9250_ADDRESS, INT_ENABLE, 0x00)   # Disable all interrupts
-		i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x00)    # Disable FIFO
-		i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x00)  # Turn on internal clock source
-		i2c.writeByte(MPU9250_ADDRESS, I2C_MST_CTRL, 0x00) # Disable I2C master
-		i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x00)  # Disable FIFO and I2C master modes
-		i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x0C)  # Reset FIFO and DMP
+		self.i2c.writeByte(MPU9250_ADDRESS, INT_ENABLE, 0x00)   # Disable all interrupts
+		self.i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x00)    # Disable FIFO
+		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x00)  # Turn on internal clock source
+		self.i2c.writeByte(MPU9250_ADDRESS, I2C_MST_CTRL, 0x00) # Disable I2C master
+		self.i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x00)  # Disable FIFO and I2C master modes
+		self.i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x0C)  # Reset FIFO and DMP
 		time.sleep(15/1000)
 
-		i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x01)      # Set low-pass filter to 188 Hz
-		i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00)  # Set sample rate to 1 kHz
-		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, 0x00)  # Set gyro full-scale to 250 degrees per second, maximum sensitivity
-		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00) #  Set accelerometer full-scale to 2 g, maximum sensitivity
+		self.i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x01)      # Set low-pass filter to 188 Hz
+		self.i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00)  # Set sample rate to 1 kHz
+		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, 0x00)  # Set gyro full-scale to 250 degrees per second, maximum sensitivity
+		self.i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00) #  Set accelerometer full-scale to 2 g, maximum sensitivity
 
 		gyrosensitivity = 131 # = 131 LSB/degrees/sec
 		accelsensitivity = 16384 # = 16384 LSB/g
 
-		i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x40) #Enable FIFO
-		i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x78) #Enable gyro and accelerometer sensors for FIFO  (max size 512 bytes in MPU-9150)
+		self.i2c.writeByte(MPU9250_ADDRESS, USER_CTRL, 0x40) #Enable FIFO
+		self.i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x78) #Enable gyro and accelerometer sensors for FIFO  (max size 512 bytes in MPU-9150)
 		time.sleep(40/1000) #accumulate 40 samples in 40 milliseconds = 480 bytes
 
-		i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x00)
-		fifo_count_data = i2c.readBytes(MPU9250_ADDRESS, FIFO_COUNTH, 2)
+		self.i2c.writeByte(MPU9250_ADDRESS, FIFO_EN, 0x00)
+		fifo_count_data = self.i2c.readBytes(MPU9250_ADDRESS, FIFO_COUNTH, 2)
 		fifo_count = struct.unpack('>h',chr(fifo_count_data[0])+chr(fifo_count_data[1]))[0]
 		packet_count = fifo_count/12
 
@@ -415,7 +416,7 @@ class MPU9250:
 
 		for i in xrange(packet_count):
 			accel_temp, gyro_temp = [0,0,0], [0,0,0]
-			data = i2c.readBytes(MPU9250_ADDRESS, FIFO_R_W, 12)
+			data = self.i2c.readBytes(MPU9250_ADDRESS, FIFO_R_W, 12)
 			accel_bias_temp[0] += struct.unpack('>h',chr(data[0])+chr(data[1]))[0] # Sum individual signed 16-bit biases to get accumulated signed 32-bit biases
 			accel_bias_temp[1] += struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
 			accel_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
@@ -449,19 +450,19 @@ class MPU9250:
 		for i in xrange(6):
 			print bin(data[i])
 
-		i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_H, data[0])
-		i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_L, data[1])
-		i2c.writeByte(MPU9250_ADDRESS, YG_OFFSET_H, data[2])
-		i2c.writeByte(MPU9250_ADDRESS, YG_OFFSET_L, data[3])
-		i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_H, data[4])
-		i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_L, data[5])
+		self.i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_H, data[0])
+		self.i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_L, data[1])
+		self.i2c.writeByte(MPU9250_ADDRESS, YG_OFFSET_H, data[2])
+		self.i2c.writeByte(MPU9250_ADDRESS, YG_OFFSET_L, data[3])
+		self.i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_H, data[4])
+		self.i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_L, data[5])
 
 		for i in xrange(3):
 			self.g_bias[i] = float(gyro_bias_temp[i])/float(gyrosensitivity)
 		# --- Accelerometer calibratation
 
 		accel_bias_reg = [0,0,0]
-		data = i2c.readBytes(MPU9250_ADDRESS, XA_OFFSET_H, 6)
+		data = self.i2c.readBytes(MPU9250_ADDRESS, XA_OFFSET_H, 6)
 		accel_bias_reg[0] = struct.unpack('>h',chr(data[0])+chr(data[1]))[0]
 		accel_bias_reg[1] = struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
 		accel_bias_reg[2] = struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
@@ -492,12 +493,12 @@ class MPU9250:
 		for i in xrange(6):
 			print bin(data[i])
 
-		i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_H, data[0])
-		i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_L, data[1])
-		i2c.writeByte(MPU9250_ADDRESS, YA_OFFSET_H, data[2])
-		i2c.writeByte(MPU9250_ADDRESS, YA_OFFSET_L, data[3])
-		i2c.writeByte(MPU9250_ADDRESS, ZA_OFFSET_H, data[4])
-		i2c.writeByte(MPU9250_ADDRESS, ZA_OFFSET_L, data[5])
+		self.i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_H, data[0])
+		self.i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_L, data[1])
+		self.i2c.writeByte(MPU9250_ADDRESS, YA_OFFSET_H, data[2])
+		self.i2c.writeByte(MPU9250_ADDRESS, YA_OFFSET_L, data[3])
+		self.i2c.writeByte(MPU9250_ADDRESS, ZA_OFFSET_H, data[4])
+		self.i2c.writeByte(MPU9250_ADDRESS, ZA_OFFSET_L, data[5])
 
 		self.a_bias[0] = float(accel_bias_temp[0]) / float(accelsensitivity)
 		self.a_bias[1] = float(accel_bias_temp[1]) / float(accelsensitivity)
