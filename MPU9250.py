@@ -459,7 +459,7 @@ class MPU9250:
 			data[i+1] = (-gyro_bias_temp[i] / 4 ) & 0xFF    # Biases are additive, so change sign on calculated average gyro biases
 
 		for i in xrange(6):
-			print bin(data[i])
+			print data[i]
 
 		self.i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_H, data[0])
 		self.i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_L, data[1])
