@@ -1,4 +1,5 @@
 import time
+import struct
 from array import array
 from OmegaExpansion import onionI2C
 
@@ -272,8 +273,10 @@ class MPU9250:
 
 		raw_input = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
 
-		for data in raw_input:
-			print bin(data)
+		result = struct.unpack('<h',raw_input[0]+raw_input[1])
+		print result 
+		# for data in raw_input:
+		# 	print bin(data)
 
 
 	def mpu_self_test(self):
