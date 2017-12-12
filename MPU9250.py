@@ -284,7 +284,7 @@ class MPU9250:
 	def mpu_self_test(self):
 
 		raw_data = [0,0,0,0,0,0]
-		self_test = [0,0,0,0,0,0]
+		self_test = array('f', [0,0,0,0,0,0])
 		aAvg, gAvg, aSTAvg, gSTAvg = [0,0,0],[0,0,0],[0,0,0],[0,0,0]
 		# raw_data = array('b',[0,0,0,0,0,0])
 		# self_test = array('b',[0,0,0,0,0,0])
@@ -340,17 +340,17 @@ class MPU9250:
 		time.sleep(1) # 25ms
 
 		# Retrieve accelerometer and gyro factory Self-TesSELF_TEST_X_GYROt Code from USR_Reg
-		self_test[0] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_ACCEL , 1)
-		self_test[1] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_ACCEL , 1)
-		self_test[2] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_ACCEL , 1)
-		self_test[3] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_GYRO , 1)
-		self_test[4] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_GYRO , 1)
-		self_test[5] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_GYRO , 1)
+		self_test[0] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_ACCEL , 1)[0]
+		self_test[1] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_ACCEL , 1)[0]
+		self_test[2] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_ACCEL , 1)[0]
+		self_test[3] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_X_GYRO , 1)[0]
+		self_test[4] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_GYRO , 1)[0]
+		self_test[5] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_GYRO , 1)[0]
 
 		print "-----"
 		# Retrieve factory self-test value from self-test code reads
 		for i in xrange(6):
-			factoryTrim[i] = (2620/1<<FS)*(pow( 1.01 , (float(self_test[i]) - 1.0) ))
+			factoryTrim[i] = (2620/1<<FS)*(pow( 1.01 , (self_test[i] - 1.0) ))
 		#Report results as a ratio of (STR - FT)/FT; the change from Factory Trim of the Self-Test Response
 		#To get percent, must multiply by 100
 		for i in xrange(3):
