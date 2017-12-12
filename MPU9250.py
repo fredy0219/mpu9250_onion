@@ -412,12 +412,14 @@ class MPU9250:
 			gyro_bias_temp[1] += struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
 			gyro_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
 
-		accel_bias_temp[0] = int(accel_bias_temp[0]/packet_count) # Normalize sums to get average count biases
-		accel_bias_temp[1] = int(accel_bias_temp[1]/packet_count)
-		accel_bias_temp[2] = int(accel_bias_temp[2]/packet_count)
-		gyro_bias_temp[0] = int(gyro_bias_temp[0]/packet_count)
-		gyro_bias_temp[1] = int(gyro_bias_temp[1]/packet_count)
-		gyro_bias_temp[2] = int(gyro_bias_temp[2]/packet_count)
+		print bin(accel_bias_temp[0])
+
+		accel_bias_temp[0] = accel_bias_temp[0]/packet_count # Normalize sums to get average count biases
+		accel_bias_temp[1] = accel_bias_temp[1]/packet_count
+		accel_bias_temp[2] = accel_bias_temp[2]/packet_count
+		gyro_bias_temp[0] = gyro_bias_temp[0]/packet_count
+		gyro_bias_temp[1] = gyro_bias_temp[1]/packet_count
+		gyro_bias_temp[2] = gyro_bias_temp[2]/packet_count
 
 		if accel_bias_temp[2] > 0L : # Remove gravity from the z-axis accelerometer bias calculation
 			accel_bias_temp[2] -= accelsensitivity
@@ -428,6 +430,8 @@ class MPU9250:
 		for i in xrange(3):
 			data[i] = (-gyro_bias_temp[i] / 4 >> 8 ) & 0xFF # Divide by 4 to get 32.9 LSB per deg/s to conform to expected bias input format
 			data[i+1] = (-gyro_bias_temp[i] / 4 ) & 0xFF    # Biases are additive, so change sign on calculated average gyro biases
+
+		print bin(data[0])
 
 		i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_H, data[0])
 		i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_L, data[1])
@@ -445,6 +449,8 @@ class MPU9250:
 		accel_bias_reg[0] = struct.unpack('>h',chr(data[0])+chr(data[1]))[0]
 		accel_bias_reg[1] = struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
 		accel_bias_reg[2] = struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
+
+
 
 		mask = 1L
 		mask_bit = [0,0,0]
@@ -466,6 +472,8 @@ class MPU9250:
 		data[4] = (accel_bias_reg[2] >> 8) & 0xFF
 		data[5] = (accel_bias_reg[2])
 		data[5] = data[5] | mask_bit[2]
+
+		print bin(data[0])
 
 		i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_H, data[0])
 		i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_L, data[1])
