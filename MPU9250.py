@@ -431,9 +431,9 @@ class MPU9250:
 			accel_bias_temp[0] += struct.unpack('>h',chr(data[0])+chr(data[1]))[0] # Sum individual signed 16-bit biases to get accumulated signed 32-bit biases
 			accel_bias_temp[1] += struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
 			accel_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
-			gyro_bias_temp[0] += struct.unpack('>h',chr(data[0])+chr(data[1]))[0]
-			gyro_bias_temp[1] += struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
-			gyro_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
+			gyro_bias_temp[0] += struct.unpack('>h',chr(data[6])+chr(data[7]))[0]
+			gyro_bias_temp[1] += struct.unpack('>h',chr(data[8])+chr(data[9]))[0]
+			gyro_bias_temp[2] += struct.unpack('>h',chr(data[10])+chr(data[11]))[0]
 
 		for i in xrange(3):
 			print accel_bias_temp[i]
