@@ -347,9 +347,6 @@ class MPU9250:
 		self_test[4] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Y_GYRO , 1)
 		self_test[5] = i2c.readBytes(MPU9250_ADDRESS, SELF_TEST_Z_GYRO , 1)
 
-		for data in self_test:
-			print bin(data)
-
 		print "-----"
 		# Retrieve factory self-test value from self-test code reads
 		for i in xrange(6):
