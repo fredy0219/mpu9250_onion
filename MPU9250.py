@@ -539,6 +539,10 @@ class MPU9250:
 		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01) # Auto select clock source to be PLL gyroscope reference if ready else
 		time.sleep(0.2)
 
+		self.i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x03)
+		self.i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x04)
+
+
 		c = self.i2c.readBytes(MPU9250_ADDRESS,GYRO_CONFIG,1)[0]
 		c = c & ~0x03
 		c = c & ~0x18
