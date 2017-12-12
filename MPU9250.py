@@ -262,6 +262,7 @@ class MPU9250:
 	def read_accel(self):
 		accel_list = self.i2c.readBytes(MPU9250_ADDRESS,ACCEL_XOUT_H,6)
 
+		print accel_list
 		accel_X = struct.unpack('>h',chr(accel_list[0])+chr(accel_list[1]))[0]
 		accel_Y = struct.unpack('>h',chr(accel_list[2])+chr(accel_list[3]))[0]
 		accel_Z = struct.unpack('>h',chr(accel_list[4])+chr(accel_list[5]))[0]
