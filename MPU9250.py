@@ -211,6 +211,7 @@ class MPU9250:
    		self.read_who_i_am()
    		# self.mpu_self_test_test()
    		self.mpu_self_test()
+   		print Self_test
 
    		self.mpu_calibrate()
    		print self.g_bias[0]
