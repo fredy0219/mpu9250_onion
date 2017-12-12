@@ -310,15 +310,16 @@ class MPU9250:
 			# raw_data[0],raw_data[1] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 2)
 			# raw_data[2],raw_data[3] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_YOUT_H, 2)
 			# raw_data[4],raw_data[5] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_ZOUT_H, 2)
-			print i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
+			
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
-
+			print raw_data
 			#print raw_data
 			aAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			aAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			aAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
 
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
+			print raw_data
 			gAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			gAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			gAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
@@ -333,11 +334,13 @@ class MPU9250:
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
+			print raw_data
 			aSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			aSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			aSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
 
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
+			print raw_data
 			gSTAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
 			gSTAvg[1] += struct.unpack('>h',chr(raw_data[2])+chr(raw_data[3]))[0]
 			gSTAvg[2] += struct.unpack('>h',chr(raw_data[4])+chr(raw_data[5]))[0]
