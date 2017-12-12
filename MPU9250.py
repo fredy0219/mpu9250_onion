@@ -436,9 +436,9 @@ class MPU9250:
 		i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_H, data[4])
 		i2c.writeByte(MPU9250_ADDRESS, ZG_OFFSET_L, data[5])
 
-		self.g_bias[0] = flaot(gyro_bias_temp[0])/flaot(gyrosensitivity)
-		self.g_bias[1] = flaot(gyro_bias_temp[1])/flaot(gyrosensitivity)
-		self,g_bias[2] = flaot(gyro_bias_temp[2])/flaot(gyrosensitivity)
+		self.g_bias[0] = float(gyro_bias_temp[0])/float(gyrosensitivity)
+		self.g_bias[1] = float(gyro_bias_temp[1])/float(gyrosensitivity)
+		self,g_bias[2] = float(gyro_bias_temp[2])/float(gyrosensitivity)
 
 		# --- Accelerometer calibratation
 
@@ -476,9 +476,9 @@ class MPU9250:
 		i2c.writeByte(MPU9250_ADDRESS, ZA_OFFSET_H, data[4])
 		i2c.writeByte(MPU9250_ADDRESS, ZA_OFFSET_L, data[5])
 
-		self.a_bias[0] = accel_bias_temp[0] / accelsensitivity
-		self.a_bias[1] = accel_bias_temp[1] / accelsensitivity
-		self.a_bias[2] = accel_bias_temp[2] / accelsensitivity
+		self.a_bias[0] = float(accel_bias_temp[0]) / float(accelsensitivity)
+		self.a_bias[1] = float(accel_bias_temp[1]) / float(accelsensitivity)
+		self.a_bias[2] = float(accel_bias_temp[2]) / float(accelsensitivity)
 
 
 
