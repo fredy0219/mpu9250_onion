@@ -304,7 +304,9 @@ class MPU9250:
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, FS<<3); # Set full scale range for the accelerometer to 2 g
 
 		for i in xrange(200):
-			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
+			raw_data[0],raw_data[1] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 2)
+			raw_data[2],raw_data[3] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_YOUT_H, 2)
+			raw_data[4],raw_data[5] = i2c.readBytes(MPU9250_ADDRESS, ACCEL_ZOUT_H, 2)
 
 			print raw_data
 			aAvg[0] += struct.unpack('>h',chr(raw_data[0])+chr(raw_data[1]))[0]
