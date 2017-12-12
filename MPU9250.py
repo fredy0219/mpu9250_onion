@@ -280,26 +280,26 @@ class MPU9250:
 
 	def get_gres(self):
 
-		if gscale == GFS_250DPS:
-			gres = 250.0/32768.0
-		if gscale == GFS_500DPS:
-			gres = 500.0/32768.0
-		if gscale == GFS_1000DPS:
-			gres = 1000.0/32768.0
-		if gscale == GFS_2000DPS:
-			gres = 2000.0/32768.0
+		if self.gscale == GFS_250DPS:
+			self.gres = 250.0/32768.0
+		if self.gscale == GFS_500DPS:
+			self.gres = 500.0/32768.0
+		if self.gscale == GFS_1000DPS:
+			self.gres = 1000.0/32768.0
+		if self.gscale == GFS_2000DPS:
+			self.gres = 2000.0/32768.0
 
 
 	def get_ares(self):
 
-		if ascale == AFS_2G:
-			gres = 2.0/32768.0;
-		if ascale == AFS_4G:
-			ares = 4.0/32768.0;
-		if ascale == AFS_8G:
-			ares = 8.0/32768.0;
-		if ascale == AFS_16G:
-			ares = 16.0/32768.0;
+		if self.ascale == AFS_2G:
+			self.gres = 2.0/32768.0;
+		if self.ascale == AFS_4G:
+			self.ares = 4.0/32768.0;
+		if self.ascale == AFS_8G:
+			self.ares = 8.0/32768.0;
+		if self.ascale == AFS_16G:
+			self.ares = 16.0/32768.0;
 
 	def mpu_self_test_test(self):
 
