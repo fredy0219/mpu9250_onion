@@ -212,6 +212,8 @@ class MPU9250:
 		# a = self.interrupt_pin.setInputDirection()
 		# b = self.interrupt_pin.setValue(0)
 
+		onionGpio._freeGpio()
+
 		print '> Instantiating gpio object'
 		gpio14 	= onionGpio.OnionGpio(19)
 		print ''
@@ -220,13 +222,13 @@ class MPU9250:
 		ret 	= gpio14.setOutputDirection()
 		print '    returned %d'%ret
 
-		# print '> Get direction: ',
-		# direction 	= gpio14.setValue(0)
-		# print direction
+		print '> Get direction: ',
+		direction 	= gpio14.setValue(0)
+		print direction
 
-		# print '> Read value: ',
-		# val		= gpio14.getValue()
-		# print val
+		print '> Read value: ',
+		val		= gpio14.getValue()
+		print val
 
    	def init_MPU9250(self):
    		self.read_who_i_am()
