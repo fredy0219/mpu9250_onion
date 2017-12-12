@@ -217,7 +217,7 @@ class MPU9250:
 		print ''
 
 		print '> Set direction to input... '
-		ret 	= gpio14.setInputDirection()
+		ret 	= gpio14.setOutputDirection()
 		print '    returned %d'%ret
 
 		print '> Get direction: ',
