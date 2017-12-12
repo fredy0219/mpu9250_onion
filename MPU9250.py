@@ -210,7 +210,7 @@ class MPU9250:
 
 		self.interrupt_pin = onionGpio.OnionGpio(18)
 		self.interrupt_pin.setInputDirection()
-		self.interrupt_pin.setValue(0)
+		# self.interrupt_pin.setValue(0)
 
    	def init_MPU9250(self):
    		self.read_who_i_am()
