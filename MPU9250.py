@@ -4,7 +4,7 @@ from array import array
 from OmegaExpansion import onionI2C
 
 ## MPU9250 Default I2C slave address
-MPU9250_ADDRESS	= 0x69
+MPU9250_ADDRESS	= 0x68
 AK8963_ADDRESS = 0x0C
 
 DEVICE_ID		= 0x71
