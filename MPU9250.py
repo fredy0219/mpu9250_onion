@@ -187,7 +187,6 @@ AFS_4G = 1
 AFS_8G = 2
 AFS_16G = 3
 
-onionGpio._freeGpio()
 i2c = onionI2C.OnionI2C()
 
 class MPU9250:
