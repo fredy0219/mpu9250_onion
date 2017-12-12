@@ -221,7 +221,7 @@ class MPU9250:
 		print '    returned %d'%ret
 
 		print '> Get direction: ',
-		direction 	= gpio14.getDirection()
+		direction 	= gpio14.setValue(0)
 		print direction
 
 		print '> Read value: ',
