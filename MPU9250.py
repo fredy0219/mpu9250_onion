@@ -359,7 +359,9 @@ class MPU9250:
 		#Report results as a ratio of (STR - FT)/FT; the change from Factory Trim of the Self-Test Response
 		#To get percent, must multiply by 100
 		for i in xrange(3):
+			print "a : {0} , {1} , {2}".format(aSTAvg[i],aAvg[i],factoryTrim[i])
 			self.Self_test[i] = 100.0*(aSTAvg[i] - aAvg[i])/factoryTrim[i] - 100
+			print "g : {0} , {1} , {2}".format(gSTAvg[i],gAvg[i],factoryTrim[i+3])
 			self.Self_test[i+3] = 100.0*(gSTAvg[i] - gAvg[i])/factoryTrim[i+3] - 100
 
 	def mpu_calibrate(self):
