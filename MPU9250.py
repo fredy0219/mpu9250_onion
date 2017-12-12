@@ -266,8 +266,6 @@ class MPU9250:
 		accel_Y = struct.unpack('>h',chr(accel_list[2])+chr(accel_list[3]))[0]
 		accel_Z = struct.unpack('>h',chr(accel_list[4])+chr(accel_list[5]))[0]
 
-		println()
-
 		return accel_X,accel_Y,accel_Z
 
 	def read_gyro(self):
