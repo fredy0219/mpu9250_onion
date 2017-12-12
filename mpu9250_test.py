@@ -17,9 +17,9 @@ if __name__ == '__main__':
 	axt,ayt,azt = mpu9250.read_accel()
 	mpu9250.get_ares()
 
-	ax = axt * mpu9250.ascale
-	ay = ayt * mpu9250.ascale
-	az = azt * mpu9250.ascale
+	ax = axt * mpu9250.ares
+	ay = ayt * mpu9250.ares
+	az = azt * mpu9250.ares
 
 	print "X-acceleration: {0} mg".format(1000*ax)
 	print "Y-acceleration: {0} mg".format(1000*ay)

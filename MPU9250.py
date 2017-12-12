@@ -293,7 +293,7 @@ class MPU9250:
 	def get_ares(self):
 
 		if self.ascale == AFS_2G:
-			self.gres = 2.0/32768.0;
+			self.ares = 2.0/32768.0;
 		if self.ascale == AFS_4G:
 			self.ares = 4.0/32768.0;
 		if self.ascale == AFS_8G:
