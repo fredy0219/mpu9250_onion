@@ -210,15 +210,17 @@ class MPU9250:
 
    	def init_MPU9250(self):
    		self.read_who_i_am()
-   		# self.mpu_self_test_test()
-   		self.mpu_self_test()
-   		print self.Self_test
 
-   		self.mpu_calibrate()
-   		print self.g_bias[0]
-   		print self.a_bias[0]
+   		self.mpu_self_test_test();
+   		# # self.mpu_self_test_test()
+   		# self.mpu_self_test()
+   		# print self.Self_test
 
-   		del self.i2c
+   		# self.mpu_calibrate()
+   		# print self.g_bias[0]
+   		# print self.a_bias[0]
+
+   		# del self.i2c
   #  		#wake up device
 		# self.i2c.writeByte(MPU9250_ADDRESS,PWR_MGMT_1,0x00)
 		# time.sleep(0.1)
@@ -282,10 +284,11 @@ class MPU9250:
 
 		raw_input = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
 
-		rc0 = chr(raw_input[0])
-		rc1 = chr(raw_input[1])
-		result = struct.unpack('>h',rc0+rc1)[0]
-		print result 
+		print raw_input
+		# rc0 = chr(raw_input[0])
+		# rc1 = chr(raw_input[1])
+		# result = struct.unpack('>h',rc0+rc1)[0]
+		# print result 
 		# for data in raw_input:
 		# 	print bin(data)
 
