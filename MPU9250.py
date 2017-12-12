@@ -300,21 +300,19 @@ class MPU9250:
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
-			aAvg[0] += (raw_data[0]<<8) | raw_data[1]
-			aAvg[1] += (raw_data[2]<<8) | raw_data[3]
-			aAvg[2] += (raw_data[4]<<8) | raw_data[5]
+			aAvg[0] += struct.unpack('>h',chr(raw_data[0]+raw_data[1]))
+			aAvg[1] += struct.unpack('>h',chr(raw_data[2]+raw_data[3]))
+			aAvg[2] += struct.unpack('>h',chr(raw_data[4]+raw_data[6]))
+
 
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
-			gAvg[0] += (raw_data[0]<<8) | raw_data[1]
-			gAvg[1] += (raw_data[2]<<8) | raw_data[3]
-			gAvg[2] += (raw_data[4]<<8) | raw_data[5]
+			gAvg[0] += struct.unpack('>h',chr(raw_data[0]+raw_data[1]))
+			gAvg[1] += struct.unpack('>h',chr(raw_data[2]+raw_data[3]))
+			gAvg[2] += struct.unpack('>h',chr(raw_data[4]+raw_data[6]))
 
-		print aAvg[0]
 		for i in xrange(3):
 			aAvg[i] /= 200
 			gAvg[i] /= 200
-
-		print aAvg[0]
 
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0xE0) # Enable self test on all three axes and set accelerometer range to +/- 2 g
    		i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG,  0xE0) # Enable self test on all three axes and set gyro range to +/- 250 degrees/s
@@ -322,21 +320,19 @@ class MPU9250:
 
 		for i in xrange(200):
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6)
-			aSTAvg[0] += (raw_data[0]<<8) | raw_data[1]
-			aSTAvg[1] += (raw_data[2]<<8) | raw_data[3]
-			aSTAvg[2] += (raw_data[4]<<8) | raw_data[5]
+			aSTAvg[0] += struct.unpack('>h',chr(raw_data[0]+raw_data[1]))
+			aSTAvg[1] += struct.unpack('>h',chr(raw_data[2]+raw_data[3]))
+			aSTAvg[2] += struct.unpack('>h',chr(raw_data[4]+raw_data[6]))
 
 			raw_data = i2c.readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6)
-			gSTAvg[0] += (raw_data[0]<<8) | raw_data[1]
-			gSTAvg[1] += (raw_data[2]<<8) | raw_data[3]
-			gSTAvg[2] += (raw_data[4]<<8) | raw_data[5]
+			gSTAvg[0] += struct.unpack('>h',chr(raw_data[0]+raw_data[1]))
+			gSTAvg[1] += struct.unpack('>h',chr(raw_data[2]+raw_data[3]))
+			gSTAvg[2] += struct.unpack('>h',chr(raw_data[4]+raw_data[6]))
 
-		print aSTAvg[0]
 		for i in xrange(3):
 			aSTAvg[i] /= 200
 			gSTAvg[i] /= 200
 
-		print aSTAvg[0]
 
 		# Configure the gyro and accelerometer for normal operation
 		i2c.writeByte(MPU9250_ADDRESS, ACCEL_CONFIG, 0x00)  
@@ -350,12 +346,6 @@ class MPU9250:
 		for i in xrange(6):
 			factoryTrim[i] = (2620/1<<FS)*(pow( 1.01 , (self_test[i] - 1.0) ))
 
-		# print "aSTAvg"
-		# print aSTAvg
-		# print "aAvg"
-		# print aAvg
-		# print "factory trim"
-		# print factoryTrim
 		#Report results as a ratio of (STR - FT)/FT; the change from Factory Trim of the Self-Test Response
 		#To get percent, must multiply by 100
 		for i in xrange(3):
