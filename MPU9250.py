@@ -217,9 +217,9 @@ class MPU9250:
    		self.mpu_self_test()
    		print self.Self_test
 
-   		# self.mpu_calibrate()
-   		# print self.g_bias[0]
-   		# print self.a_bias[0]
+   		self.mpu_calibrate()
+   		print self.g_bias[0]
+   		print self.a_bias[0]
 
    		# del self.i2c
   #  		#wake up device
