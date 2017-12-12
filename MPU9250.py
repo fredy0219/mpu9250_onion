@@ -412,7 +412,11 @@ class MPU9250:
 			gyro_bias_temp[1] += struct.unpack('>h',chr(data[2])+chr(data[3]))[0]
 			gyro_bias_temp[2] += struct.unpack('>h',chr(data[4])+chr(data[5]))[0]
 
-		print bin(accel_bias_temp[0])
+		for i in xrange(3):
+			print accel_bias_temp[0]
+		for i in xrange(3):
+			print gyro_bias_temp[0]
+
 
 		accel_bias_temp[0] = accel_bias_temp[0]/packet_count # Normalize sums to get average count biases
 		accel_bias_temp[1] = accel_bias_temp[1]/packet_count
@@ -431,7 +435,8 @@ class MPU9250:
 			data[i] = (-gyro_bias_temp[i] / 4 >> 8 ) & 0xFF # Divide by 4 to get 32.9 LSB per deg/s to conform to expected bias input format
 			data[i+1] = (-gyro_bias_temp[i] / 4 ) & 0xFF    # Biases are additive, so change sign on calculated average gyro biases
 
-		print bin(data[0])
+		for i in xrange(6):
+			print bin(data[i])
 
 		i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_H, data[0])
 		i2c.writeByte(MPU9250_ADDRESS, XG_OFFSET_L, data[1])
@@ -473,7 +478,8 @@ class MPU9250:
 		data[5] = (accel_bias_reg[2])
 		data[5] = data[5] | mask_bit[2]
 
-		print bin(data[0])
+		for i in xrange(6):
+			print bin(data[i])
 
 		i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_H, data[0])
 		i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_L, data[1])
