@@ -192,8 +192,8 @@ class MPU9250:
 	def __init__(self):
 
 		self.i2c = onionI2C.OnionI2C()
-		self.gscale = GFS_1000DPS
-		self.ascale = AFS_4G
+		self.gscale = GFS_250DPS
+		self.ascale = AFS_2G
 
 		self.gres = 0
 		self.ares = 0
@@ -265,6 +265,8 @@ class MPU9250:
 		accel_X = struct.unpack('>h',chr(accel_list[0])+chr(accel_list[1]))[0]
 		accel_Y = struct.unpack('>h',chr(accel_list[2])+chr(accel_list[3]))[0]
 		accel_Z = struct.unpack('>h',chr(accel_list[4])+chr(accel_list[5]))[0]
+
+		println()
 
 		return accel_X,accel_Y,accel_Z
 
