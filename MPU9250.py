@@ -335,9 +335,6 @@ class MPU9250:
 		factoryTrim = array('f', [0,0,0,0,0,0])
 		FS = 0x00 # uint8_t
 
-		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01)  
-		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
-
 		self.i2c.writeByte(MPU9250_ADDRESS, SMPLRT_DIV, 0x00) #Set gyro sample rate to 1kHz
 		self.i2c.writeByte(MPU9250_ADDRESS, CONFIG, 0x02) #Set gyro sample rate to 1kHz and DLPF to 92Hz
 		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, FS<<3) #Set full scale range for the gyro to 250 dps
@@ -412,13 +409,13 @@ class MPU9250:
 	def mpu_calibrate(self):
 
 		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x80) # Write a one to bit 7 reset bit; toggle reset device
-		time.sleep(0.01)
+		time.sleep(0.1)
 
 		# get stable time source; Auto select clock source to be PLL gyroscope reference if ready 
 		# else use the internal oscillator, bits 2:0 = 001
 		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x01)  
 		self.i2c.writeByte(MPU9250_ADDRESS, PWR_MGMT_2, 0x00)
-		time.sleep(0.02)
+		time.sleep(0.2)
 
 		# Configure device for bias calculation
 		self.i2c.writeByte(MPU9250_ADDRESS, INT_ENABLE, 0x00)   # Disable all interrupts
@@ -511,13 +508,13 @@ class MPU9250:
 		accel_bias_reg[2] -= accel_bias_temp[2]/8
 
 		data[0] = (accel_bias_reg[0] >> 8) & 0xFF
-		data[1] = (accel_bias_reg[0])
+		data[1] = (accel_bias_reg[0]) & 0xFF
 		data[1] = data[1] | mask_bit[0]
 		data[2] = (accel_bias_reg[1] >> 8) & 0xFF
-		data[3] = (accel_bias_reg[1])
+		data[3] = (accel_bias_reg[1]) & 0xFF
 		data[3] = data[3] | mask_bit[1]
 		data[4] = (accel_bias_reg[2] >> 8) & 0xFF
-		data[5] = (accel_bias_reg[2])
+		data[5] = (accel_bias_reg[2]) & 0xFF
 		data[5] = data[5] | mask_bit[2]
 
 		self.i2c.writeByte(MPU9250_ADDRESS, XA_OFFSET_H, data[0])
@@ -546,7 +543,7 @@ class MPU9250:
 		c = self.i2c.readBytes(MPU9250_ADDRESS,GYRO_CONFIG,1)[0]
 		c = c & ~0x03
 		c = c & ~0x18
-		c = c | self.gscale
+		c = c | self.gscale << 3
 		self.i2c.writeByte(MPU9250_ADDRESS, GYRO_CONFIG, c )
 
 		c = self.i2c.readBytes(MPU9250_ADDRESS, ACCEL_CONFIG,1)[0]
